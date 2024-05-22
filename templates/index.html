@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>벌금 관리 프로그램</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1, h2 {
+            color: #555;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="submit"],
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #5cb85c;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #4cae4c;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li button {
+            background-color: #d9534f;
+        }
+        li button:hover {
+            background-color: #c9302c;
+        }
+        .logout {
+            text-align: right;
+        }
+        .fine-details {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logout">
+            <a href="/logout">로그아웃</a>
+        </div>
+        <h1>1학년 8반 벌금 관리 프로그램</h1>
+
+        <h2>벌금 추가</h2>
+        <form action="/add" method="post">
+            <input type="text" name="name" placeholder="이름을 입력하세요" required>
+            <input type="number" step="1000" name="amount" placeholder="벌금 금액을 입력하세요" required>
+            <input type="text" name="reason" placeholder="벌금 사유를 입력하세요" required>
+            <input type="submit" value="추가">
+        </form>
+
+        <h2>벌금 목록</h2>
+        {% for name, fines in fines_data.items() %}
+            <h3>{{ name }}님의 벌금 목록 (총 합계: {{ total_fines[name] }}원):</h3>
+            <ul>
+                {% for fine in fines %}
+                    <li>
+                        <div class="fine-details">
+                            <span>{{ fine.amount }}원: {{ fine.reason }}</span>
+                            <span style="font-size: 0.9em; color: #777;">추가 시간: {{ fine.timestamp }}</span>
+                        </div>
+                        <form action="/remove" method="post" style="display: inline;">
+                            <input type="hidden" name="name" value="{{ name }}">
+                            <input type="hidden" name="index" value="{{ loop.index0 }}">
+                            <button type="submit">제거</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+</body>
+</html>
