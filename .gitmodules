@@ -1,0 +1,3 @@
+[submodule "classfine"]
+  path = classfine
+  url = git@github.com:onew0000/classfine.git
